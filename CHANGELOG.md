@@ -1,13 +1,12 @@
 # Changelog
 
-## v0.9.0 — Final
+## v1.0.0
 
-- Finalizado el diseño del botón independiente.
-- Tooltip adaptativo al tema de Discord, con fondo, borde y flecha.
-- Eliminado el zoom del hover.
-- Eliminada la función FakeMute independiente.
-- Añadidos sonidos configurables de activación y desactivación.
-- Añadido atajo global configurable.
-- Añadida interfaz de grabación de combinaciones.
-- Añadido soporte para usar el atajo con Discord sin foco.
-- Añadida limpieza del atajo global al cerrar o desactivar el plugin.
+- Renamed the plugin from FakeDeafen to FakeDeafen+.
+- Renamed the public repository to FakeDeafenPlus.
+- Preserved the existing Fake Deafen behavior, button, sounds and global shortcut.
+- Updated Windows and Linux installation documentation.
+
+## v0.9.0
+
+- Final release under the previous FakeDeafen name.

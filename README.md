@@ -1,16 +1,17 @@
-# FakeDeafen
+# FakeDeafen+
 
-FakeDeafen makes Discord publish your voice state as deafened without engaging the local mute or deafen controls, allowing you to keep hearing and talking.
+FakeDeafen+ is a custom Vencord userplugin that makes Discord display you as deafened while you can still hear and speak locally.
 
 ## Features
 
-- Independent Fake Deafen button next to Discord's voice controls.
+- Independent FakeDeafen+ control next to Discord's voice controls.
 - No separate Fake Mute mode.
 - Configurable activation and deactivation sounds.
 - Configurable global keyboard shortcut.
 - The global shortcut works while Discord is unfocused or minimized.
 - Theme-aware tooltip and control styling.
-- Restores the real voice state when disabled.
+- Restores your real voice state when disabled.
+- Automatically disables itself when you leave or change voice channels.
 
 ## Requirements
 
@@ -35,8 +36,6 @@ pnpm --version
 
 ### Windows (PowerShell)
 
-Open PowerShell and run:
-
 ```powershell
 Set-Location $HOME
 
@@ -48,7 +47,7 @@ pnpm install --frozen-lockfile
 New-Item -ItemType Directory -Path .\src\userplugins -Force | Out-Null
 Set-Location .\src\userplugins
 
-git clone https://github.com/fevegit/FakeDeafen.git fakeDeafen
+git clone https://github.com/fevegit/FakeDeafenPlus.git fakeDeafen
 
 Set-Location ..\..
 
@@ -56,14 +55,12 @@ pnpm build
 pnpm inject
 ```
 
-`pnpm inject` opens the Vencord installer. Select the Discord installation you want to patch.
-
 After injection:
 
 1. Fully close Discord, including the system tray process.
 2. Start Discord again.
 3. Open **Settings -> Vencord -> Plugins**.
-4. Enable **FakeDeafen**.
+4. Enable **FakeDeafen+**.
 
 The final plugin path should be:
 
@@ -72,8 +69,6 @@ The final plugin path should be:
 ```
 
 ### Linux (Bash)
-
-Open a terminal and run:
 
 ```bash
 cd "$HOME"
@@ -86,7 +81,7 @@ pnpm install --frozen-lockfile
 mkdir -p src/userplugins
 cd src/userplugins
 
-git clone https://github.com/fevegit/FakeDeafen.git fakeDeafen
+git clone https://github.com/fevegit/FakeDeafenPlus.git fakeDeafen
 
 cd ../..
 
@@ -94,14 +89,12 @@ pnpm build
 pnpm inject
 ```
 
-`pnpm inject` opens the Vencord installer. Select the Discord installation you want to patch.
-
 After injection:
 
 1. Fully close Discord.
 2. Start Discord again.
 3. Open **Settings -> Vencord -> Plugins**.
-4. Enable **FakeDeafen**.
+4. Enable **FakeDeafen+**.
 
 The final plugin path should be:
 
@@ -109,7 +102,7 @@ The final plugin path should be:
 $HOME/Vencord/src/userplugins/fakeDeafen/
 ```
 
-For Vesktop or another non-standard Discord client, follow the official Vencord installation guide for that client and keep the plugin inside the same Vencord source tree.
+For Vesktop or another non-standard Discord client, follow the official Vencord installation guide for that client and use the same Vencord source tree.
 
 ## Updating
 
@@ -123,8 +116,6 @@ Set-Location "$HOME\Vencord"
 pnpm build
 pnpm inject
 ```
-
-Fully restart Discord afterwards.
 
 ### Linux (Bash)
 
@@ -141,7 +132,7 @@ Fully restart Discord afterwards.
 
 ## Uninstalling
 
-Disable the plugin in Vencord before removing its folder.
+Disable FakeDeafen+ in Vencord before removing its folder.
 
 ### Windows (PowerShell)
 
@@ -167,41 +158,12 @@ pnpm inject
 
 Fully restart Discord after rebuilding.
 
-## Troubleshooting
-
-### The plugin does not appear
-
-Check that the plugin folder is exactly:
-
-```text
-Vencord/src/userplugins/fakeDeafen/
-```
-
-The folder itself must directly contain the plugin source files such as `index.ts` or `index.tsx`.
-
-### `pnpm` is not recognized or not found
-
-Install pnpm and reopen the terminal. Then verify it with:
-
-```text
-pnpm --version
-```
-
-### The build fails after a Vencord update
-
-Update both Vencord and this plugin, reinstall dependencies and rebuild:
-
-```text
-git pull
-pnpm install --frozen-lockfile
-pnpm build
-```
-
 ## Notes
 
 - This is an unofficial custom userplugin and is not supported by the Vencord team.
 - Custom plugins require rebuilding Vencord whenever their source changes.
 - Use `src/userplugins`; do not copy the plugin into `src/plugins`.
+- The GitHub repository is named `FakeDeafenPlus` because GitHub repository names cannot contain the `+` character.
 - This repository contains only plugin source code and public documentation.
 
 ## License

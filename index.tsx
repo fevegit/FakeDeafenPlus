@@ -35,9 +35,9 @@ interface PatchedSocket {
     wrapped: GatewaySend;
 }
 
-const logger = new Logger("FakeDeafen");
+const logger = new Logger("FakeDeafen+");
 const gatewayModule = findByPropsLazy("getSocket") as GatewayModule;
-const Native = VencordNative.pluginHelpers.FakeDeafen as PluginNative<typeof import("./native")>;
+const Native = VencordNative.pluginHelpers["FakeDeafen+"] as PluginNative<typeof import("./native")>;
 
 const BUTTON_ID = "vc-fake-deafen-button";
 const SLOT_ID = "vc-fake-deafen-slot";
@@ -60,7 +60,7 @@ function getAudioContext(): AudioContext | null {
         audioContext ??= new AudioContext();
         return audioContext;
     } catch (error) {
-        logger.error("No se pudo inicializar el sonido de FakeDeafen:", error);
+        logger.error("No se pudo inicializar el sonido de FakeDeafen+:", error);
         return null;
     }
 }
@@ -93,7 +93,7 @@ function playToggleSound(enabled: boolean) {
         oscillator.start(now);
         oscillator.stop(now + 0.19);
     }).catch(error => {
-        logger.error("No se pudo reproducir el sonido de FakeDeafen:", error);
+        logger.error("No se pudo reproducir el sonido de FakeDeafen+:", error);
     });
 }
 
@@ -205,7 +205,7 @@ async function configureGlobalHotkey(notifyOnFailure = true) {
         logger.error("No se pudo registrar el atajo global:", error);
 
         if (notifyOnFailure) {
-            showToast("No se pudo registrar el atajo global de FakeDeafen.", Toasts.Type.FAILURE);
+            showToast("No se pudo registrar el atajo global de FakeDeafen+.", Toasts.Type.FAILURE);
         }
         return;
     }
@@ -418,12 +418,12 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
 export const settings = definePluginSettings({
     playSound: {
         type: OptionType.BOOLEAN,
-        description: "Reproduce un sonido breve al activar o desactivar FakeDeafen.",
+        description: "Reproduce un sonido breve al activar o desactivar FakeDeafen+.",
         default: true
     },
     showButton: {
         type: OptionType.BOOLEAN,
-        description: "Muestra un botón de FakeDeafen junto a los controles de voz.",
+        description: "Muestra un botón de FakeDeafen+ junto a los controles de voz.",
         default: true,
         onChange: scheduleButtonUpdate
     },
@@ -486,7 +486,7 @@ function deactivateForChannelChange() {
     active = false;
     activeChannelId = null;
     scheduleButtonUpdate();
-    showToast("FakeDeafen se desactivó al salir o cambiar de canal.", Toasts.Type.MESSAGE);
+    showToast("FakeDeafen+ se desactivó al salir o cambiar de canal.", Toasts.Type.MESSAGE);
 }
 
 function patchCurrentSocket(): GatewaySocket | null {
@@ -554,7 +554,7 @@ function refreshVoiceState(useFakeState: boolean): boolean {
         guild_id: channel?.guild_id ?? null,
         channel_id: channelId,
         // Discord represents a deafened user as both muted and deafened.
-        // This is a single FakeDeafen mode, not a separate Fake Mute feature.
+        // This is a single FakeDeafen+ mode, not a separate Fake Mute feature.
         self_mute: useFakeState ? true : getActualMute(),
         self_deaf: useFakeState ? true : getActualDeaf(),
         self_video: false,
@@ -587,7 +587,7 @@ function setActive(next: boolean, silent = false): boolean {
 
         if (!patchCurrentSocket()) {
             if (!silent) {
-                showToast("FakeDeafen no pudo acceder al socket de Discord.", Toasts.Type.FAILURE);
+                showToast("FakeDeafen+ no pudo acceder al socket de Discord.", Toasts.Type.FAILURE);
             }
             return false;
         }
@@ -600,7 +600,7 @@ function setActive(next: boolean, silent = false): boolean {
             activeChannelId = null;
 
             if (!silent) {
-                showToast("No se pudo activar FakeDeafen.", Toasts.Type.FAILURE);
+                showToast("No se pudo activar FakeDeafen+.", Toasts.Type.FAILURE);
             }
             scheduleButtonUpdate();
             return false;
@@ -616,7 +616,7 @@ function setActive(next: boolean, silent = false): boolean {
     if (!silent) {
         playToggleSound(active);
         showToast(
-            active ? "FakeDeafen activado." : "FakeDeafen desactivado.",
+            active ? "FakeDeafen+ activado." : "FakeDeafen+ desactivado.",
             active ? Toasts.Type.SUCCESS : Toasts.Type.MESSAGE
         );
     }
@@ -842,7 +842,7 @@ function showTooltip(button: HTMLButtonElement) {
     const tooltip = document.createElement("div");
     tooltip.id = TOOLTIP_ID;
     tooltip.setAttribute("role", "tooltip");
-    tooltip.textContent = "Fake Deafen";
+    tooltip.textContent = "FakeDeafen+";
 
     document.body.appendChild(tooltip);
 
@@ -921,7 +921,7 @@ function updateButton() {
         slot?.remove();
         slot = createButtonSlot();
 
-        // FakeDeafen queda como un control independiente justo a la izquierda
+        // FakeDeafen+ queda como un control independiente justo a la izquierda
         // del grupo de mute, así el hover no puede propagarse al botón de mute.
         insertionPoint.container.insertBefore(slot, insertionPoint.anchor);
     }
@@ -929,7 +929,7 @@ function updateButton() {
     const button = slot.querySelector<HTMLButtonElement>(`#${BUTTON_ID}`);
     if (!button) return;
 
-    button.setAttribute("aria-label", "Fake Deafen");
+    button.setAttribute("aria-label", "FakeDeafen+");
     button.setAttribute("aria-pressed", String(active));
     button.dataset.active = String(active);
     button.removeAttribute("title");
@@ -961,7 +961,7 @@ function uninstallButtonObserver() {
 }
 
 export default definePlugin({
-    name: "FakeDeafen",
+    name: "FakeDeafen+",
     description: "Permite aparecer ensordecido mientras sigues hablando y escuchando.",
     authors: [{ name: "Feve", id: 0n }],
     tags: ["Voice", "Privacy", "Shortcuts"],
@@ -969,7 +969,7 @@ export default definePlugin({
     requiresRestart: false,
 
     toolboxActions: {
-        "Alternar FakeDeafen": toggleActive
+        "Alternar FakeDeafen+": toggleActive
     },
 
     flux: {
