@@ -166,6 +166,17 @@ Fully restart Discord after rebuilding.
 - The GitHub repository is named `FakeDeafenPlus` because GitHub repository names cannot contain the `+` character.
 - This repository contains only plugin source code and public documentation.
 
+<!-- acknowledgements:start -->
+## Acknowledgements
+
+FakeDeafen+ was inspired by [FakeVoiceOptions](https://github.com/eightcon/FakeVoiceOptions) by **eightcon**.
+
+I used the original plugin and really liked its core idea, but I felt that the experience was missing a more focused Fake Deafen workflow and deeper integration with Discord. FakeDeafen+ was created as an independent implementation with a dedicated control, a configurable global shortcut, activation sounds and theme-aware UI.
+
+Many thanks to eightcon and the original contributors for their work and for inspiring this project.
+<!-- acknowledgements:end -->
+
 ## License
 
 GPL-3.0-or-later.
+
