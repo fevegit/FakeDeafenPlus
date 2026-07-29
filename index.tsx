@@ -842,7 +842,7 @@ function showTooltip(button: HTMLButtonElement) {
     const tooltip = document.createElement("div");
     tooltip.id = TOOLTIP_ID;
     tooltip.setAttribute("role", "tooltip");
-    tooltip.textContent = "FakeDeafen+";
+    tooltip.textContent = "Fake Deafen";
 
     document.body.appendChild(tooltip);
 
@@ -929,7 +929,7 @@ function updateButton() {
     const button = slot.querySelector<HTMLButtonElement>(`#${BUTTON_ID}`);
     if (!button) return;
 
-    button.setAttribute("aria-label", "FakeDeafen+");
+    button.setAttribute("aria-label", "Fake Deafen");
     button.setAttribute("aria-pressed", String(active));
     button.dataset.active = String(active);
     button.removeAttribute("title");
