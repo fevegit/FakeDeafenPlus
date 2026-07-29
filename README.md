@@ -180,3 +180,17 @@ Many thanks to eightcon and the original contributors for their work and for ins
 
 GPL-3.0-or-later.
 
+<!-- spanish-documentation:start -->
+## Documentación en español
+
+**FakeDeafen+** hace que aparezcas ensordecido en Discord mientras sigues escuchando y hablando localmente.
+
+### Funciones
+
+- Botón integrado junto a los controles de voz.
+- Atajo global configurable, incluso con Discord en segundo plano.
+- Aviso sonoro opcional al activar o desactivar el modo.
+- Interfaz automática en español o inglés según el idioma de Discord.
+
+> Utiliza este complemento de forma responsable. El estado mostrado a otros usuarios no representa necesariamente tu estado de audio local.
+<!-- spanish-documentation:end -->

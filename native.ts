@@ -68,7 +68,7 @@ export async function registerHotkey(
             return {
                 ok: false,
                 version: activationVersion,
-                error: "Ese atajo global está ocupado o Windows no permite registrarlo."
+                error: "HOTKEY_UNAVAILABLE"
             };
         }
 
@@ -84,7 +84,7 @@ export async function registerHotkey(
             version: activationVersion,
             error: error instanceof Error
                 ? error.message
-                : "No se pudo registrar el atajo global."
+                : "HOTKEY_REGISTRATION_FAILED"
         };
     }
 }

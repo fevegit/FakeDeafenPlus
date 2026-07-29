@@ -18,6 +18,7 @@ import {
     showToast,
     Toasts
 } from "@webpack/common";
+import { t } from "./i18n";
 
 type GatewayPayload = Record<string, unknown>;
 type GatewaySend = (op: number, data?: GatewayPayload, ...args: unknown[]) => unknown;
@@ -112,6 +113,26 @@ interface HotkeyRegistrationResult {
     error?: string;
 }
 
+function localizeHotkeyError(error?: string): string {
+    switch (error) {
+        case "HOTKEY_UNAVAILABLE":
+            return t(
+                "Ese atajo global está ocupado o Windows no permite registrarlo.",
+                "That global shortcut is already in use or Windows does not allow it."
+            );
+        case "HOTKEY_REGISTRATION_FAILED":
+            return t(
+                "No se pudo registrar el atajo global.",
+                "The global shortcut could not be registered."
+            );
+        default:
+            return error || t(
+                "El atajo global ya está ocupado por otra aplicación.",
+                "The global shortcut is already used by another application."
+            );
+    }
+}
+
 function formatHotkey(accelerator: string): string {
     return accelerator
         .replaceAll("CommandOrControl", "Ctrl")
@@ -166,7 +187,10 @@ function keyboardEventToAccelerator(event: KeyboardEvent): { value?: string; err
     const isFunctionKey = /^F(?:[1-9]|1[0-9]|2[0-4])$/.test(primary);
     if (!parts.length && !isFunctionKey) {
         return {
-            error: "Añade Ctrl, Alt, Shift o Win para evitar capturar una tecla normal en todo Windows."
+            error: t(
+                "Añade Ctrl, Alt, Shift o Win para evitar capturar una tecla normal en todo Windows.",
+                "Add Ctrl, Alt, Shift, or Win to avoid capturing a regular key system-wide."
+            )
         };
     }
 
@@ -205,7 +229,13 @@ async function configureGlobalHotkey(notifyOnFailure = true) {
         logger.error("No se pudo registrar el atajo global:", error);
 
         if (notifyOnFailure) {
-            showToast("No se pudo registrar el atajo global de FakeDeafen+.", Toasts.Type.FAILURE);
+            showToast(
+                t(
+                    "No se pudo registrar el atajo global de FakeDeafen+.",
+                    "The FakeDeafen+ global shortcut could not be registered."
+                ),
+                Toasts.Type.FAILURE
+            );
         }
         return;
     }
@@ -219,7 +249,7 @@ async function configureGlobalHotkey(notifyOnFailure = true) {
 
         if (notifyOnFailure) {
             showToast(
-                registration.error ?? "El atajo global ya está ocupado por otra aplicación.",
+                localizeHotkeyError(registration.error),
                 Toasts.Type.FAILURE
             );
         }
@@ -336,11 +366,14 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
     return (
         <div style={{ padding: "8px 0 4px" }}>
             <div style={{ color: "var(--header-primary)", fontWeight: 600, marginBottom: "4px" }}>
-                Atajo global
+                {t("Atajo global", "Global shortcut")}
             </div>
 
             <div style={{ color: "var(--text-muted)", fontSize: "13px", marginBottom: "10px" }}>
-                Funciona incluso cuando Discord no tiene el foco.
+                {t(
+                    "Funciona incluso cuando Discord no tiene el foco.",
+                    "Works even when Discord is not focused."
+                )}
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
@@ -359,7 +392,7 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
                     }}
                 >
                     {recording
-                        ? "Pulsa la combinación…"
+                        ? t("Pulsa la combinación…", "Press the key combination…")
                         : formatHotkey(currentHotkey)}
                 </div>
 
@@ -375,7 +408,9 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
                         setRecording(value => !value);
                     }}
                 >
-                    {recording ? "Cancelar grabación" : "Grabar combinación"}
+                    {recording
+                        ? t("Cancelar grabación", "Cancel recording")
+                        : t("Grabar combinación", "Record shortcut")}
                 </button>
 
                 <button
@@ -396,13 +431,13 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
                         cursor: recording || currentHotkey === DEFAULT_HOTKEY ? "not-allowed" : "pointer"
                     }}
                 >
-                    Restablecer
+                    {t("Restablecer", "Reset")}
                 </button>
             </div>
 
             {recording && !error && (
                 <div style={{ color: "var(--text-muted)", fontSize: "12px", marginTop: "8px" }}>
-                    Esc cancela la grabación.
+                    {t("Esc cancela la grabación.", "Esc cancels recording.")}
                 </div>
             )}
 
@@ -418,18 +453,27 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
 export const settings = definePluginSettings({
     playSound: {
         type: OptionType.BOOLEAN,
-        description: "Reproduce un sonido breve al activar o desactivar FakeDeafen+.",
+        description: t(
+            "Reproduce un sonido breve al activar o desactivar FakeDeafen+.",
+            "Play a short sound when FakeDeafen+ is enabled or disabled."
+        ),
         default: true
     },
     showButton: {
         type: OptionType.BOOLEAN,
-        description: "Muestra un botón de FakeDeafen+ junto a los controles de voz.",
+        description: t(
+            "Muestra un botón de FakeDeafen+ junto a los controles de voz.",
+            "Show a FakeDeafen+ button next to the voice controls."
+        ),
         default: true,
         onChange: scheduleButtonUpdate
     },
     enableKeybind: {
         type: OptionType.BOOLEAN,
-        description: "Activa un atajo global que funciona incluso fuera de Discord.",
+        description: t(
+            "Activa un atajo global que funciona incluso fuera de Discord.",
+            "Enable a global shortcut that also works outside Discord."
+        ),
         default: true,
         onChange: scheduleGlobalHotkeyUpdate
     },
@@ -486,7 +530,13 @@ function deactivateForChannelChange() {
     active = false;
     activeChannelId = null;
     scheduleButtonUpdate();
-    showToast("FakeDeafen+ se desactivó al salir o cambiar de canal.", Toasts.Type.MESSAGE);
+    showToast(
+        t(
+            "FakeDeafen+ se desactivó al salir o cambiar de canal.",
+            "FakeDeafen+ was disabled after leaving or changing channels."
+        ),
+        Toasts.Type.MESSAGE
+    );
 }
 
 function patchCurrentSocket(): GatewaySocket | null {
@@ -580,14 +630,26 @@ function setActive(next: boolean, silent = false): boolean {
         const channelId = getVoiceChannelId();
         if (!channelId) {
             if (!silent) {
-                showToast("Entra primero en un canal o llamada de voz.", Toasts.Type.FAILURE);
+                showToast(
+                    t(
+                        "Entra primero en un canal o llamada de voz.",
+                        "Join a voice channel or call first."
+                    ),
+                    Toasts.Type.FAILURE
+                );
             }
             return false;
         }
 
         if (!patchCurrentSocket()) {
             if (!silent) {
-                showToast("FakeDeafen+ no pudo acceder al socket de Discord.", Toasts.Type.FAILURE);
+                showToast(
+                    t(
+                        "FakeDeafen+ no pudo acceder al socket de Discord.",
+                        "FakeDeafen+ could not access Discord's socket."
+                    ),
+                    Toasts.Type.FAILURE
+                );
             }
             return false;
         }
@@ -600,7 +662,13 @@ function setActive(next: boolean, silent = false): boolean {
             activeChannelId = null;
 
             if (!silent) {
-                showToast("No se pudo activar FakeDeafen+.", Toasts.Type.FAILURE);
+                showToast(
+                    t(
+                        "No se pudo activar FakeDeafen+.",
+                        "FakeDeafen+ could not be enabled."
+                    ),
+                    Toasts.Type.FAILURE
+                );
             }
             scheduleButtonUpdate();
             return false;
@@ -616,7 +684,9 @@ function setActive(next: boolean, silent = false): boolean {
     if (!silent) {
         playToggleSound(active);
         showToast(
-            active ? "FakeDeafen+ activado." : "FakeDeafen+ desactivado.",
+            active
+                ? t("FakeDeafen+ activado.", "FakeDeafen+ enabled.")
+                : t("FakeDeafen+ desactivado.", "FakeDeafen+ disabled."),
             active ? Toasts.Type.SUCCESS : Toasts.Type.MESSAGE
         );
     }
@@ -962,14 +1032,17 @@ function uninstallButtonObserver() {
 
 export default definePlugin({
     name: "FakeDeafen+",
-    description: "Permite aparecer ensordecido mientras sigues hablando y escuchando.",
+    description: t(
+        "Permite aparecer ensordecido mientras sigues hablando y escuchando.",
+        "Appear deafened while continuing to speak and listen."
+    ),
     authors: [{ name: "Feve", id: 0n }],
     tags: ["Voice", "Privacy", "Shortcuts"],
     settings,
     requiresRestart: false,
 
     toolboxActions: {
-        "Alternar FakeDeafen+": toggleActive
+        [t("Alternar FakeDeafen+", "Toggle FakeDeafen+")]: toggleActive
     },
 
     flux: {
