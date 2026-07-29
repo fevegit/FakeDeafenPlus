@@ -452,28 +452,43 @@ function HotkeyRecorder({ setValue }: PluginSettingComponentProps) {
 
 export const settings = definePluginSettings({
     playSound: {
+        get displayName() {
+            return t("Reproducir sonido", "Play Sound");
+        },
         type: OptionType.BOOLEAN,
-        description: t(
-            "Reproduce un sonido breve al activar o desactivar FakeDeafen+.",
-            "Play a short sound when FakeDeafen+ is enabled or disabled."
-        ),
+        get description() {
+            return t(
+                "Reproduce un sonido breve al activar o desactivar FakeDeafen+.",
+                "Play a short sound when FakeDeafen+ is enabled or disabled."
+            );
+        },
         default: true
     },
     showButton: {
+        get displayName() {
+            return t("Mostrar botón", "Show Button");
+        },
         type: OptionType.BOOLEAN,
-        description: t(
-            "Muestra un botón de FakeDeafen+ junto a los controles de voz.",
-            "Show a FakeDeafen+ button next to the voice controls."
-        ),
+        get description() {
+            return t(
+                "Muestra un botón de FakeDeafen+ junto a los controles de voz.",
+                "Show a FakeDeafen+ button next to the voice controls."
+            );
+        },
         default: true,
         onChange: scheduleButtonUpdate
     },
     enableKeybind: {
+        get displayName() {
+            return t("Activar atajo", "Enable Keybind");
+        },
         type: OptionType.BOOLEAN,
-        description: t(
-            "Activa un atajo global que funciona incluso fuera de Discord.",
-            "Enable a global shortcut that also works outside Discord."
-        ),
+        get description() {
+            return t(
+                "Activa un atajo global que funciona incluso fuera de Discord.",
+                "Enable a global shortcut that also works outside Discord."
+            );
+        },
         default: true,
         onChange: scheduleGlobalHotkeyUpdate
     },
@@ -1032,10 +1047,12 @@ function uninstallButtonObserver() {
 
 export default definePlugin({
     name: "FakeDeafen+",
-    description: t(
-        "Permite aparecer ensordecido mientras sigues hablando y escuchando.",
-        "Appear deafened while continuing to speak and listen."
-    ),
+    get description() {
+        return t(
+            "Permite aparecer ensordecido mientras sigues hablando y escuchando.",
+            "Appear deafened while continuing to speak and listen."
+        );
+    },
     authors: [{ name: "Feve", id: 0n }],
     tags: ["Voice", "Privacy", "Shortcuts"],
     settings,
