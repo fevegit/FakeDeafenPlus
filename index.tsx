@@ -7,8 +7,8 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
-import definePlugin, { OptionType } from "@utils/types";
 import type { PluginNative, PluginSettingComponentProps } from "@utils/types";
+import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import {
     ChannelStore,
@@ -18,6 +18,7 @@ import {
     showToast,
     Toasts
 } from "@webpack/common";
+
 import { t } from "./i18n";
 
 type GatewayPayload = Record<string, unknown>;
@@ -1011,6 +1012,7 @@ function updateButton() {
         insertionPoint.container.insertBefore(slot, insertionPoint.anchor);
     }
 
+    if (!slot) return;
     const button = slot.querySelector<HTMLButtonElement>(`#${BUTTON_ID}`);
     if (!button) return;
 
