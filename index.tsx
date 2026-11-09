@@ -7,17 +7,49 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Logger } from "@utils/Logger";
-import type { PluginNative, PluginSettingComponentProps } from "@utils/types";
 import definePlugin, { OptionType } from "@utils/types";
+import type { PluginNative, PluginSettingComponentProps } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import {
     ChannelStore,
     MediaEngineStore,
     React,
     SelectedChannelStore,
-    showToast,
-    Toasts
+    showToast as nativeShowToast
 } from "@webpack/common";
+
+const Toasts = {
+    Type: {
+        MESSAGE: "message",
+        SUCCESS: "success",
+        FAILURE: "critical",
+        ERROR: "critical"
+    }
+};
+
+function showToast(
+    message: string,
+    type: string = Toasts.Type.MESSAGE,
+    options?: { duration?: number }
+) {
+    const payload: {
+        text: string;
+        variant?: "success" | "critical";
+        duration?: number;
+    } = { text: message };
+
+    if (type === Toasts.Type.SUCCESS) {
+        payload.variant = "success";
+    } else if (type === Toasts.Type.FAILURE) {
+        payload.variant = "critical";
+    }
+
+    if (options?.duration !== undefined) {
+        payload.duration = options.duration;
+    }
+
+    nativeShowToast(payload);
+}
 
 import { t } from "./i18n";
 
@@ -1012,8 +1044,7 @@ function updateButton() {
         insertionPoint.container.insertBefore(slot, insertionPoint.anchor);
     }
 
-    if (!slot) return;
-    const button = slot.querySelector<HTMLButtonElement>(`#${BUTTON_ID}`);
+    const button = (slot as HTMLDivElement).querySelector<HTMLButtonElement>(`#${BUTTON_ID}`);
     if (!button) return;
 
     button.setAttribute("aria-label", "Fake Deafen");
